@@ -3,6 +3,7 @@ import './App.css';
 import React, { useState, useEffect } from "react";
 import About from './pages/About';
 import Main from './pages/Main';
+import signup from './pages/Authentication/signup';
 import { Route, Link } from "react-router-dom"; 
 import NavBar from './navBar/NavBar';
 
@@ -29,6 +30,7 @@ function App() {
 
       <Route exact path="/" render={() => <Main songs={songs}/> } />
       <Route exact path="/about" component={About} />
+      <Route exact path="/signUp" component={signup} />
     </div>
   );
 }
