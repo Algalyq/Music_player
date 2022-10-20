@@ -2,9 +2,9 @@ from rest_framework import serializers
 from .models import *
 from django.contrib.auth.models import User
 from rest_framework.authtoken.views import Token
-from django.contrib.auth import get_user_model
 
-
+from django.contrib.auth import get_user_model, password_validation
+from django.contrib.auth.models import BaseUserManager
 
 User = get_user_model()
 
@@ -41,6 +41,28 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         Token.objects.create(user=user)
         return user
+    
+
+
+class UserRegisterSerializer(serializers.ModelSerializer):
+    """
+    A user serializer for registering the user
+    """
+
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'password', 'first_name', 'last_name')
+
+    def validate_username(self, value):
+        user = User.objects.filter(username=value)
+        if user:
+            raise serializers.ValidationError("Email is already taken")
+        return BaseUserManager.normalize_email(value)
+
+    def validate_password(self, value):
+        password_validation.validate_password(value)
+        return value
+    
     
 class EmptySerializer(serializers.Serializer):
     pass 

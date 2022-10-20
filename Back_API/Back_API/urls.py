@@ -8,7 +8,7 @@ from music_player.views import index ,detail
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('songs/',include('music_player.urls')),
-    path('users/', include('Auth.urls'))
+    path('', include('Auth.urls'))
 ]
 
 
