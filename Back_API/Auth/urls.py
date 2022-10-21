@@ -7,6 +7,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework import routers
 router = routers.DefaultRouter(trailing_slash=False)
 router.register('api/auth', AuthViewSet, basename='auth')
+router.register('api/user', UserViewSet, basename='user')
 urlpatterns = [
     path('', include(router.urls))
 ]

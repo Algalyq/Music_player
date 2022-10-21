@@ -6,7 +6,7 @@ from Auth.serializers import  UserSerializer
 from django.contrib.auth import get_user_model, logout
 from django.shortcuts import get_object_or_404
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework import viewsets, status
@@ -19,7 +19,16 @@ from .utils import get_and_authenticate_user, create_user_account
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+@api_view(['GET'])
+def current_user(request):
+    """
+    Determine the current user by their token, and return their data
+    """
     
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
+
     
 
 User = get_user_model()
@@ -29,7 +38,8 @@ class AuthViewSet(viewsets.GenericViewSet):
     serializer_class = serializers.EmptySerializer
     serializer_classes = {
         'login': serializers.UserLoginSerializer,
-        'register': serializers.UserRegisterSerializer
+        'register': serializers.UserRegisterSerializer, 
+        'password_change': serializers.PasswordChangeSerializer,
     }
 
     @action(methods=['POST', ], detail=False)
@@ -66,4 +76,12 @@ class AuthViewSet(viewsets.GenericViewSet):
             return self.serializer_classes[self.action]
         return super().get_serializer_class()
 
+
+    @action(methods=['POST'], detail=False, permission_classes=[IsAuthenticated, ])
+    def password_change(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        request.user.set_password(serializer.validated_data['new_password'])
+        request.user.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
