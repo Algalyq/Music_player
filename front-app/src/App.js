@@ -28,7 +28,10 @@ useEffect(() => {
   
     return (
      <div>
-        <Main songs={song}/>
+      <NavBar />     
+       <Route exact path="/" render={() => <Main songs={song}/> } />
+
+      <Route exact path="/login" component={LogIn} />
      </div>
     );
   
@@ -61,9 +64,7 @@ export default App;
   //   <div className="App"><link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"/>
   //     <NavBar />
 
-  //     <Route exact path="/" render={() => <Main songs={songs}/> } />
-  //     <Route exact path="/about" component={About} />
-  //     <Route exact path="/signUp" component={signup} />
+
   //   </div>
   // );
 

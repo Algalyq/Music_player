@@ -15,11 +15,12 @@ from rest_framework.response import Response
 from . import serializers
 from .utils import get_and_authenticate_user, create_user_account
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.GenericViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    
+    serializer_class = serializers.UserSerializer
 
-
+ 
 User = get_user_model()
 
 class AuthViewSet(viewsets.GenericViewSet):
@@ -27,7 +28,7 @@ class AuthViewSet(viewsets.GenericViewSet):
     serializer_class = serializers.EmptySerializer
     serializer_classes = {
         'login': serializers.UserLoginSerializer,
-        'register': serializers.UserRegisterSerializer, 
+        'register': serializers.UserSerializer, 
         'password_change': serializers.PasswordChangeSerializer,
     }
 
@@ -37,7 +38,6 @@ class AuthViewSet(viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         user = get_and_authenticate_user(**serializer.validated_data)
         data = serializers.AuthUserSerializer(user).data
-     
         return Response(data=data, status=status.HTTP_200_OK)
 
     
@@ -50,12 +50,11 @@ class AuthViewSet(viewsets.GenericViewSet):
     @action(methods=['POST', ], detail=False)
     def register(self, request):
         serializer = self.get_serializer(data=request.data)
-        print(serializer)
         serializer.is_valid(raise_exception=True)
-        print(serializer.is_valid(raise_exception=True))
         user = create_user_account(**serializer.validated_data)
         data = serializers.AuthUserSerializer(user).data
         return Response(data=data, status=status.HTTP_201_CREATED)
+        
     
     def get_serializer_class(self):
         if not isinstance(self.serializer_classes, dict):
