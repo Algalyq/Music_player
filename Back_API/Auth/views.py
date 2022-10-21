@@ -11,7 +11,6 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from . import serializers
 from .utils import get_and_authenticate_user, create_user_account
@@ -20,16 +19,6 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-@api_view(['GET'])
-def current_user(request):
-    """
-    Determine the current user by their token, and return their data
-    """
-    
-    serializer = UserSerializer(request.user)
-    return Response(serializer.data)
-
-    
 
 User = get_user_model()
 

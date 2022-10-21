@@ -9,6 +9,6 @@ router = routers.DefaultRouter(trailing_slash=False)
 router.register('api/auth', AuthViewSet, basename='auth')
 router.register('api/user', UserViewSet, basename='user')
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
 ]
 
