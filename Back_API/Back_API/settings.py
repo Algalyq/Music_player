@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'music_player',
     'rest_framework',
     'corsheaders',
+    'rest_auth',
 ]
 
 MIDDLEWARE = [
@@ -50,12 +51,14 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'Back_API.urls'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    )
+      'DEFAULT_PERMISSION_CLASSES': (
+         'rest_framework.permissions.IsAuthenticated',
+     ),
+     'DEFAULT_AUTHENTICATION_CLASSES': (
+         'rest_framework.authentication.SessionAuthentication',
+         'rest_framework.authentication.BasicAuthentication',
+         'rest_framework.authentication.TokenAuthentication',
+     ),
 }
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
