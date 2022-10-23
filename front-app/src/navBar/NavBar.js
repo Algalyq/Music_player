@@ -11,7 +11,7 @@ const userLogin = (tok) => {
     return (
         <ul>
             <li><Link to="/">Main</Link></li>
-            
+            <li><Link to="/main">Main</Link></li>
             {/* <li><Link to="/about">About</Link></li>
             <li><Link to="/signUp">Sign Up</Link></li> */}
             <li><Link to="/login" render={() => <LogIn userLogin ={userLogin} />}>Login</Link></li>

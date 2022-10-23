@@ -7,7 +7,7 @@ class LogIn extends Component {
 
   state = {
     credentials: {username: '', password: ''},
-    logged_in: localStorage.getItem('token') ? true : false,
+ 
   
   }
 
@@ -21,10 +21,7 @@ class LogIn extends Component {
     .then(
       data => {
         this.props.userLogin(data.token);
-        console.log(this.state.credentials.username)
-        this.props.history.push("/")
-      }
-    )
+      })
 
     .catch( error => console.error(error))
   }
@@ -54,7 +51,6 @@ class LogIn extends Component {
     .then(
       data => {
         console.log(data.token);
-        console.log(this.state.credentials.username)
     
       }
     )
@@ -67,12 +63,14 @@ class LogIn extends Component {
   }
 
   render() {
+
+
     return (
       <div>
   
         <div>
         <h1>Login user form</h1>
-      
+      <form onSubmit={this.login}>
       <label>
         Username:
         <input type="text" name="username"
@@ -89,8 +87,8 @@ class LogIn extends Component {
       </label>
  
       <br/>
-      <button onClick={this.login}>Login</button>
-
+      <button type='submit'>Login</button>
+      </form>
 
       <button onClick={this.register} >Register</button>
       <button onClick={this.logout}>Logout</button>

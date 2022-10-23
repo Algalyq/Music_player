@@ -14,6 +14,8 @@ import LogIn from './pages/Authentication/LogIn';
 function App () {
  
 
+ 
+
 const [token, setToken] = useState([]);
 
 const userLogin = (tok) => {
@@ -25,6 +27,7 @@ const userLogin = (tok) => {
         <NavBar/>
    {/* <LogIn userLogin={userLogin}/> */}
    <Route exact path ="/" component={About}></Route>
+   <Route exact path ="/main" component={Main}></Route>
     <Route exact path="/login"  render={() => <LogIn userLogin={userLogin}/> } />
          </div>
     );
