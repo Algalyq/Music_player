@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import Dashboard from '../src/components/Dashboard'
 import Login from './auth/Login';
 import Preferences from '../src/components/Preferences'
@@ -12,26 +12,35 @@ import Logout from '../src/auth/Logout';
 function App() {
   
   const { token, setToken } = useToken();
- 
   if(!token){
-    return <Login setToken={setToken} />
+    return (
+      <div className="wrapper">
+        <h1>Application log in</h1>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/login">
+              <Login setToken={setToken} />
+            </Route>
+  
+          </Switch>
+        </BrowserRouter>
+      </div>
+    );
   }
   else if(token){
-    return <Logout setToken={setToken} />
+    return (
+      <div className="wrapper">
+        <h1>Application log out</h1>
+    
+            <Route path="/logout">
+              <Logout setToken={setToken} />
+            </Route>
+  
+      
+      </div>
+    );
   }
-  return (
-    <div className="wrapper">
-      <h1>Application</h1>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/dashboard">
-            <Dashboard />
-          </Route>
-         
-        </Switch>
-      </BrowserRouter>
-    </div>
-  );
-}
+
+} 
 
 export default App;

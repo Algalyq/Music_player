@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
+import { useHistory } from "react-router-dom";
 
 async function loginUser(credentials) {
     return fetch('http://localhost:8000/token-auth/', {
@@ -11,17 +11,14 @@ async function loginUser(credentials) {
       body: JSON.stringify(credentials)
     })
       .then(data => data.json())
-      .then(
-        console.log(credentials.username))
+
    }
    
 
 export default function Login({ setToken }) {
-    
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
-
-
+  const history = useHistory();
   const handleSubmit = async e => {
     e.preventDefault();
     const token = await loginUser({
@@ -29,6 +26,8 @@ export default function Login({ setToken }) {
       password
     });
     setToken(token);
+    history.push('/logout')
+
   }
   return(
     <div className="login-wrapper">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+import { useHistory } from "react-router-dom";
 
 async function logoutUser(credentials) {
     return fetch('http://localhost:8000/api/auth/logout', {
@@ -20,7 +21,7 @@ export default function Login({ setToken }) {
     
     const [username, setUserName] = useState();
     const [password, setPassword] = useState();
-  
+    const history = useHistory();
   
     const handleSubmit = async e => {
       e.preventDefault();
@@ -29,6 +30,7 @@ export default function Login({ setToken }) {
         password
       });
       setToken(token);
+      history.push('/login')
     }
     return(
       <div className="login-wrapper">
