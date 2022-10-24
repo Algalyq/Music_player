@@ -1,46 +1,66 @@
-import React, { useState } from 'react';
-import './App.css';
-import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
-import Dashboard from '../src/components/Dashboard'
-import Login from './auth/Login';
-import Preferences from '../src/components/Preferences'
-import useToken from '../src/auth/useToken';
-import Logout from '../src/auth/Logout';
+import React, { Component } from 'react';
+import {Route, Switch, BrowserRouter, Redirect} from 'react-router-dom';
 
+import { Provider, connect } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 
+import {auth} from "./actions/auth";
+import Login from "./components/Login";
 
-function App() {
-  
-  const { token, setToken } = useToken();
-  if(!token){
-    return (
-      <div className="wrapper">
-        <h1>Application log in</h1>
-        <BrowserRouter>
-          <Switch>
-            <Route path="/login">
-              <Login setToken={setToken} />
-            </Route>
-  
-          </Switch>
-        </BrowserRouter>
-      </div>
-    );
-  }
-  else if(token){
-    return (
-      <div className="wrapper">
-        <h1>Application log out</h1>
-    
-            <Route path="/logout">
-              <Logout setToken={setToken} />
-            </Route>
-  
-      
-      </div>
-    );
-  }
+let store = createStore( applyMiddleware(thunk));
 
-} 
+class RootContainerComponent extends Component {
 
-export default App;
+    componentDidMount() {
+        this.props.loadUser();
+    }
+
+    PrivateRoute = ({component: ChildComponent, ...rest}) => {
+        return <Route {...rest} render={props => {
+            if (this.props.auth.isLoading) {
+                return <em>Loading...</em>;
+            } else if (!this.props.auth.isAuthenticated) {
+                return <Redirect to="/login" />;
+            } else {
+                return <ChildComponent {...props} />
+            }
+        }} />
+    }
+
+    render() {
+        return (
+            <BrowserRouter>
+                <Switch>
+                    <Route exact path="/login" component={Login} />
+                </Switch>
+            </BrowserRouter>
+        );
+    }
+}
+
+const mapStateToProps = state => {
+    return {
+        auth: state.auth,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        loadUser: () => {
+            return dispatch(auth.loadUser());
+        }
+    }
+}
+
+let RootContainer = connect(mapStateToProps, mapDispatchToProps)(RootContainerComponent);
+
+export default class App extends Component {
+    render() {
+        return (
+            <Provider store={store}>
+                <RootContainer />
+            </Provider>
+        )
+    }
+}
