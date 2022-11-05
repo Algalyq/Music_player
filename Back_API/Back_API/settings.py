@@ -48,22 +48,27 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'Back_API.urls'
 
 REST_FRAMEWORK = {
       'DEFAULT_PERMISSION_CLASSES': (
          'rest_framework.permissions.IsAuthenticated',
      ),
-     'DEFAULT_AUTHENTICATION_CLASSES': (
-         'rest_framework.authentication.SessionAuthentication',
-         'rest_framework.authentication.BasicAuthentication',
-         'rest_framework.authentication.TokenAuthentication',
-     ),
+ 'DEFAULT_AUTHENTICATION_CLASSES': (
+    
+    'rest_framework.authentication.SessionAuthentication',
+    'rest_framework.authentication.BasicAuthentication',
+    'rest_framework_simplejwt.authentication.JWTAuthentication', 
+),
+}
+SIMPLE_JWT = {
+'USER_ID_FIELD': 'user_id'
 }
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000"
 ]
+
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': 'mysite.utils.my_jwt_response_handler'
 }
@@ -94,6 +99,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'mysite.utils.my_jwt_response_handler'
 }
 
 
